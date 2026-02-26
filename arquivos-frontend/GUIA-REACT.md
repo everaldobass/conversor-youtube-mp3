@@ -10,12 +10,12 @@ Abra no navegador e teste todas as funcionalidades antes de migrar para React.
 ## 📦 Iniciar o projeto React + Vite
 
 ```bash
-npm create vite@latest soundwave-frontend -- --template react
+npm create vite@latest frontend -- --template react
 cd soundwave-frontend
 npm install
 npm install framer-motion lucide-react axios react-router-dom
 npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
+npm install @tailwindcss/vite
 npm run dev
 ```
 

@@ -1,0 +1,139 @@
+/* ============================================================
+   styles/animations.css — Keyframes Reutilizáveis
+   ============================================================
+   Centralizamos TODAS as animações CSS aqui para fácil
+   manutenção. Cada animação tem um comentário explicando
+   onde e como é usada.
+   ============================================================ */
+
+/* ── Background orbs flutuantes (AppLayout) ── */
+@keyframes orbFloat1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-80px, 60px) scale(1.2); }
+}
+
+@keyframes orbFloat2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(60px, -50px) scale(1.15); }
+}
+
+/* ── Ondas concêntricas do login (LoginPage) ── */
+@keyframes waveExpand {
+  0%   { width: 100px;  height: 100px;  opacity: 0.8; }
+  100% { width: 800px;  height: 800px;  opacity: 0; }
+}
+
+/* ── Ícone de logo pulsando (LoginPage) ── */
+@keyframes logoPulse {
+  0%,100% { box-shadow: 0 0 40px rgba(29,185,84,0.4); }
+  50%     { box-shadow: 0 0 60px rgba(29,185,84,0.6), 0 0 100px rgba(29,185,84,0.3); }
+}
+
+/* ── Barras de som animadas (LoginPage + Player) ── */
+@keyframes soundBar {
+  0%,100% { transform: scaleY(0.3); opacity: 0.4; }
+  50%     { transform: scaleY(1);   opacity: 1; }
+}
+
+/* ── Card subindo ao aparecer (LoginPage + Modal) ── */
+@keyframes cardSlideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Toast entrando pela direita (Toast) ── */
+@keyframes toastIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes toastOut {
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}
+
+/* ── Fade simples (LoginPage saindo) ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Equalizador (TrackItem quando tocando) ── */
+@keyframes eq1 {
+  0%,100% { height: 4px;  }
+  50%     { height: 14px; }
+}
+@keyframes eq2 {
+  0%,100% { height: 10px; }
+  40%     { height: 4px;  }
+}
+@keyframes eq3 {
+  0%,100% { height: 7px;  }
+  60%     { height: 14px; }
+}
+
+/* ── Album art girando enquanto toca (Player) ── */
+@keyframes artSpin {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Skeleton shimmer (SkeletonCard) ── */
+@keyframes skeletonShimmer {
+  0%   { background-position: -468px 0; }
+  100% { background-position:  468px 0; }
+}
+
+/* ── Gradiente animado no fundo do login ── */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   CLASSES DE ANIMAÇÃO (para uso direto via className)
+   ============================================================ */
+
+.animate-card-in      { animation: cardSlideUp 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.animate-fade-in      { animation: fadeIn 0.4s ease forwards; }
+.animate-fade-out     { animation: fadeOut 0.4s ease forwards; }
+.animate-toast-in     { animation: toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.animate-toast-out    { animation: toastOut 0.3s ease forwards; }
+.animate-art-spin     { animation: artSpin 20s linear infinite; }
+.animate-logo-pulse   { animation: logoPulse 2s ease-in-out infinite; }
+.animate-wave-expand  { animation: waveExpand 4s ease-out infinite; }
+
+/* Barras do equalizador com delays */
+.eq-bar               { width: 3px; background: var(--accent); border-radius: 2px; }
+.eq-bar:nth-child(1)  { animation: eq1 0.9s ease-in-out infinite; }
+.eq-bar:nth-child(2)  { animation: eq2 0.9s ease-in-out 0.15s infinite; }
+.eq-bar:nth-child(3)  { animation: eq3 0.9s ease-in-out 0.3s infinite; }
+
+/* Barras de som do login */
+.sound-bar            { width: 4px; border-radius: 2px; background: var(--accent); }
+.sound-bar:nth-child(1) { height: 12px; animation: soundBar 1.2s ease-in-out 0s infinite; }
+.sound-bar:nth-child(2) { height: 24px; animation: soundBar 1.2s ease-in-out .1s infinite; }
+.sound-bar:nth-child(3) { height: 18px; animation: soundBar 1.2s ease-in-out .2s infinite; }
+.sound-bar:nth-child(4) { height: 28px; animation: soundBar 1.2s ease-in-out .3s infinite; }
+.sound-bar:nth-child(5) { height: 16px; animation: soundBar 1.2s ease-in-out .4s infinite; }
+.sound-bar:nth-child(6) { height: 22px; animation: soundBar 1.2s ease-in-out .2s infinite; }
+.sound-bar:nth-child(7) { height: 10px; animation: soundBar 1.2s ease-in-out .1s infinite; }
+
+/* Skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg3) 25%,
+    var(--bg2) 50%,
+    var(--bg3) 75%
+  );
+  background-size: 936px 100%;
+  animation: skeletonShimmer 1.4s ease infinite;
+  border-radius: 4px;
+}

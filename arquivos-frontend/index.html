@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SoundWave — Music Player</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN PAGE ═══════════════ -->
+<div class="login-page" id="loginPage">
+  <div class="login-bg-waves">
+    <div class="wave-circle"></div>
+    <div class="wave-circle"></div>
+    <div class="wave-circle"></div>
+  </div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">🎧</div>
+      <h1>SoundWave</h1>
+      <p>Sua música. Sua plataforma.</p>
+      <div class="sound-bars">
+        <div class="sound-bar"></div>
+        <div class="sound-bar"></div>
+        <div class="sound-bar"></div>
+        <div class="sound-bar"></div>
+        <div class="sound-bar"></div>
+        <div class="sound-bar"></div>
+        <div class="sound-bar"></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">EMAIL</label>
+      <input class="form-input" type="email" placeholder="seu@email.com" id="loginEmail" value="demo@soundwave.com"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">SENHA</label>
+      <input class="form-input" type="password" placeholder="••••••••" id="loginPassword" value="demo123"/>
+    </div>
+    <button class="btn-login" onclick="doLogin()">ENTRAR</button>
+    <div class="login-divider">ou</div>
+    <button class="btn-demo" onclick="doLogin()">🎵 Entrar como Convidado</button>
+    <div class="login-footer">
+      Não tem conta? <a href="#">Cadastrar grátis</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN APP ═══════════════ -->
+<div class="bg-gradient-orb"></div>
+<div class="app" id="mainApp" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🎧</div>
+      <span class="logo-text">SoundWave</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Menu</div>
+      <a class="nav-item active" onclick="setActiveNav(this)">
+        <span class="nav-icon">🏠</span>
+        <span>Início</span>
+      </a>
+      <a class="nav-item" onclick="setActiveNav(this)">
+        <span class="nav-icon">🔍</span>
+        <span>Buscar</span>
+      </a>
+      <a class="nav-item" onclick="setActiveNav(this)">
+        <span class="nav-icon">📚</span>
+        <span>Biblioteca</span>
+      </a>
+      <div class="nav-section-label">Minha Música</div>
+      <a class="nav-item" onclick="setActiveNav(this)">
+        <span class="nav-icon">🎵</span>
+        <span>Playlists</span>
+        <span class="nav-badge" id="playlistBadge">0</span>
+      </a>
+      <a class="nav-item" onclick="setActiveNav(this)">
+        <span class="nav-icon">❤️</span>
+        <span>Curtidas</span>
+      </a>
+      <a class="nav-item" onclick="setActiveNav(this)">
+        <span class="nav-icon">🎛️</span>
+        <span>Stems</span>
+      </a>
+      <a class="nav-item" onclick="setActiveNav(this)">
+        <span class="nav-icon">▶️</span>
+        <span>YouTube → MP3</span>
+      </a>
+    </nav>
+    <button class="sidebar-collapse-btn" id="collapseBtn" onclick="toggleSidebar()" title="Recolher menu">⟨</button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-nav">
+        <button class="topbar-nav-btn" title="Voltar">←</button>
+        <button class="topbar-nav-btn" title="Avançar">→</button>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar músicas, artistas…" id="searchInput" oninput="handleSearch(this.value)"/>
+        <span class="search-icon">🔍</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Alternar tema" id="themeBtn">🌙</button>
+        <div class="avatar" title="Meu perfil" onclick="showToast('👤 Perfil — em breve!')">EV</div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1 class="greeting" id="greeting">Boa tarde, Everaldo!</h1>
+      <p class="greeting-sub">O que você quer ouvir hoje?</p>
+
+      <div class="quick-play-grid" id="quickPlayGrid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- RECENTLY PLAYED -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Adicionados Recentemente</h2>
+        <span class="section-link" onclick="showToast('📂 Biblioteca completa — em breve!')">Ver tudo</span>
+      </div>
+      <div class="cards-row" id="recentCards">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- TRACK LIST -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Sua Playlist</h2>
+        <span class="section-link" onclick="openYTModal()">+ Adicionar do YouTube</span>
+      </div>
+      <div class="track-list">
+        <div class="track-list-header">
+          <span>#</span>
+          <span>TÍTULO</span>
+          <span class="col-album">ÁLBUM</span>
+          <span style="text-align:right">DURAÇÃO</span>
+          <span class="col-actions"></span>
+        </div>
+        <div id="trackList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <div style="height:40px"></div>
+  </main>
+
+  <!-- MUSIC PLAYER -->
+  <footer class="player" id="player">
+
+    <!-- Track Info -->
+    <div class="player-track">
+      <div class="player-art" id="playerArt">🎵</div>
+      <div class="player-track-info">
+        <div class="player-title" id="playerTitle">Nenhuma música</div>
+        <div class="player-artist" id="playerArtist">Selecione uma faixa</div>
+      </div>
+      <button class="player-like" id="playerLike" onclick="toggleLikeCurrent()">♡</button>
+    </div>
+
+    <!-- Controls + Progress -->
+    <div class="player-controls">
+      <div class="player-btns">
+        <button class="ctrl-btn" id="shuffleBtn" onclick="toggleShuffle()" title="Aleatório">🔀</button>
+        <button class="ctrl-btn" onclick="prevTrack()" title="Anterior">⏮</button>
+        <button class="ctrl-btn ctrl-play" id="playBtn" onclick="togglePlay()" title="Play/Pause">▶</button>
+        <button class="ctrl-btn" onclick="nextTrack()" title="Próxima">⏭</button>
+        <button class="ctrl-btn" id="repeatBtn" onclick="toggleRepeat()" title="Repetir">🔁</button>
+      </div>
+      <div class="player-progress">
+        <span class="progress-time" id="currentTime">0:00</span>
+        <div class="progress-bar-wrap" id="progressBar" onclick="seekTo(event)">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <span class="progress-time" id="totalTime">0:00</span>
+      </div>
+    </div>
+
+    <!-- Volume & Extras -->
+    <div class="player-extras">
+      <button class="ctrl-btn" onclick="showToast('🎛️ Stems — em breve!')" title="Stems" style="font-size:16px">🎛</button>
+      <button class="ctrl-btn" onclick="showToast('📋 Fila — em breve!')" title="Fila">📋</button>
+      <div class="volume-wrap">
+        <button class="vol-btn" id="volBtn" onclick="toggleMute()">🔊</button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80" oninput="setVolume(this.value)"/>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- YOUTUBE URL MODAL (inline) -->
+<div id="ytModal" style="
+  display:none;position:fixed;inset:0;z-index:3000;
+  background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+">
+  <div style="
+    background:var(--card);border:1px solid var(--glass-border);
+    border-radius:20px;padding:32px;width:100%;max-width:460px;
+    margin:16px;box-shadow:0 40px 80px rgba(0,0,0,0.6);
+    animation:cardSlideUp .4s ease;
+  ">
+    <h3 style="font-size:18px;font-weight:800;margin-bottom:8px">🎥 YouTube → MP3</h3>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:20px">Cole a URL do vídeo para converter e adicionar à sua playlist.</p>
+    <input id="ytUrlInput" class="form-input" placeholder="https://youtube.com/watch?v=..." style="margin-bottom:16px"/>
+    <div style="display:flex;gap:10px">
+      <button onclick="closeYTModal()" style="flex:1;padding:12px;background:var(--bg3);border:1px solid var(--glass-border);border-radius:99px;color:var(--text2);font-family:inherit;font-weight:600;cursor:pointer;transition:all .3s">Cancelar</button>
+      <button onclick="convertYT()" style="flex:2;padding:12px;background:var(--accent);border:none;border-radius:99px;color:#000;font-family:inherit;font-weight:800;cursor:pointer;transition:all .3s" onmouseover="this.style.background='#1ed760'" onmouseout="this.style.background='var(--accent)'">Converter 🚀</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  ESTADO GLOBAL DA APLICAÇÃO
+// ═══════════════════════════════════════════════════════
+const state = {
+  theme: 'dark',
+  isPlaying: false,
+  shuffle: false,
+  repeat: false,
+  muted: false,
+  volume: 80,
+  currentTrackIdx: 0,
+  progress: 0,
+  progressTimer: null,
+  tracks: [
+    { id:1, emoji:'🎸', title:'Bohemian Rhapsody',  artist:'Queen',          album:'A Night at the Opera',  duration:'5:55', liked:true },
+    { id:2, emoji:'🎹', title:'Imagine',             artist:'John Lennon',    album:'Imagine',               duration:'3:07', liked:false },
+    { id:3, emoji:'🎷', title:'So What',             artist:'Miles Davis',    album:'Kind of Blue',          duration:'9:22', liked:true },
+    { id:4, emoji:'🎺', title:'Enter Sandman',        artist:'Metallica',      album:'Metallica (Black)',      duration:'5:32', liked:false },
+    { id:5, emoji:'🥁', title:'Smells Like Teen Spirit',artist:'Nirvana',    album:'Nevermind',             duration:'5:01', liked:true },
+    { id:6, emoji:'🎻', title:'November Rain',        artist:'Guns N\' Roses', album:'Use Your Illusion I',   duration:'8:57', liked:false },
+    { id:7, emoji:'🎼', title:'Hotel California',     artist:'Eagles',         album:'Hotel California',      duration:'6:30', liked:true },
+    { id:8, emoji:'🎤', title:'Purple Haze',          artist:'Jimi Hendrix',   album:'Are You Experienced',   duration:'2:50', liked:false },
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+//  GREETING baseado na hora
+// ═══════════════════════════════════════════════════════
+(function setGreeting(){
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  document.getElementById('greeting').textContent = `${greet}, Everaldo! 👋`;
+})();
+
+// ═══════════════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════════════
+function doLogin(){
+  const email = document.getElementById('loginEmail').value;
+  const pass  = document.getElementById('loginPassword').value;
+  if(!email || !pass){ showToast('⚠️ Preencha todos os campos','warn'); return; }
+  const loginPage = document.getElementById('loginPage');
+  const mainApp   = document.getElementById('mainApp');
+  loginPage.classList.add('hidden');
+  setTimeout(()=>{
+    loginPage.style.display='none';
+    mainApp.style.display='grid';
+    renderAll();
+    showToast('🎵 Bem-vindo ao SoundWave!');
+  }, 400);
+}
+
+// ═══════════════════════════════════════════════════════
+//  RENDER FUNCTIONS
+// ═══════════════════════════════════════════════════════
+function renderAll(){
+  renderQuickPlay();
+  renderRecentCards();
+  renderTrackList();
+  updatePlayerBadge();
+}
+
+const GRADIENTS = [
+  'linear-gradient(135deg,#1a3a2a,#0d2011)',
+  'linear-gradient(135deg,#1a1a3a,#0d0d20)',
+  'linear-gradient(135deg,#3a1a1a,#201010)',
+  'linear-gradient(135deg,#3a2a1a,#201508)',
+  'linear-gradient(135deg,#1a3a3a,#0d2020)',
+  'linear-gradient(135deg,#2a1a3a,#180d20)',
+];
+
+function renderQuickPlay(){
+  const grid = document.getElementById('quickPlayGrid');
+  const shown = state.tracks.slice(0,6);
+  grid.innerHTML = shown.map((t,i)=>`
+    <div class="quick-card" onclick="playTrack(${state.tracks.indexOf(t)})">
+      <div class="quick-card-img" style="background:${GRADIENTS[i%GRADIENTS.length]}">${t.emoji}</div>
+      <div class="quick-card-body">
+        <div class="quick-card-title">${t.title}</div>
+      </div>
+      <div class="quick-play-btn">▶</div>
+    </div>
+  `).join('');
+}
+
+function renderRecentCards(){
+  const row = document.getElementById('recentCards');
+  row.innerHTML = state.tracks.map((t,i)=>`
+    <div class="music-card" onclick="playTrack(${i})">
+      <div class="music-card-art" style="background:${GRADIENTS[i%GRADIENTS.length]}">
+        ${t.emoji}
+        <div class="card-play-overlay"><div class="card-play-btn">▶</div></div>
+      </div>
+      <div class="music-card-title">${t.title}</div>
+      <div class="music-card-sub">${t.artist}</div>
+    </div>
+  `).join('');
+}
+
+function renderTrackList(){
+  const list = document.getElementById('trackList');
+  list.innerHTML = state.tracks.map((t,i)=>`
+    <div class="track-item${i===state.currentTrackIdx&&state.isPlaying?' playing':''}" onclick="playTrack(${i})" id="track-${i}">
+      <div class="track-num">
+        <span class="num-txt">${i+1}</span>
+        ${i===state.currentTrackIdx&&state.isPlaying
+          ? `<div class="equalizer"><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div></div>`
+          : `<span class="play-icon">▶</span>`
+        }
+      </div>
+      <div class="track-info">
+        <div class="track-art" style="background:${GRADIENTS[i%GRADIENTS.length]}">${t.emoji}</div>
+        <div>
+          <div class="track-title">${t.title}</div>
+          <div class="track-artist">${t.artist}</div>
+        </div>
+      </div>
+      <div class="track-album">${t.album}</div>
+      <div class="track-duration">${t.duration}</div>
+      <div class="track-actions">
+        <button class="track-like-btn${t.liked?' liked':''}" onclick="event.stopPropagation();toggleLike(${i})" title="Curtir">
+          ${t.liked?'♥':'♡'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updatePlayerBadge(){
+  document.getElementById('playlistBadge').textContent = state.tracks.length;
+}
+
+// ═══════════════════════════════════════════════════════
+//  PLAYER CONTROLS
+// ═══════════════════════════════════════════════════════
+function playTrack(idx){
+  state.currentTrackIdx = idx;
+  const t = state.tracks[idx];
+  document.getElementById('playerTitle').textContent  = t.title;
+  document.getElementById('playerArtist').textContent = t.artist;
+  document.getElementById('playerArt').textContent    = t.emoji;
+  document.getElementById('playerLike').textContent   = t.liked ? '♥' : '♡';
+  document.getElementById('playerLike').className = 'player-like' + (t.liked ? ' liked' : '');
+  document.getElementById('totalTime').textContent    = t.duration;
+
+  // Simulate playing
+  state.isPlaying = true;
+  state.progress  = 0;
+  updatePlayButton();
+  startProgress(parseDuration(t.duration));
+  renderTrackList();
+  document.getElementById('playerArt').classList.add('spinning');
+
+  // Scroll track into view
+  const el = document.getElementById(`track-${idx}`);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  showToast(`▶ ${t.title} — ${t.artist}`);
+
+  // In production: call API
+  // fetch('/api/player/' + t.id, { headers: { Authorization: 'Bearer ' + token } })
+}
+
+function togglePlay(){
+  if(state.tracks.length===0){ showToast('⚠️ Adicione músicas primeiro'); return; }
+  if(!state.isPlaying && state.currentTrackIdx === 0 && state.progress === 0){
+    playTrack(0); return;
+  }
+  state.isPlaying = !state.isPlaying;
+  updatePlayButton();
+  if(state.isPlaying){
+    const t = state.tracks[state.currentTrackIdx];
+    startProgress(parseDuration(t.duration));
+    document.getElementById('playerArt').classList.add('spinning');
+  } else {
+    clearInterval(state.progressTimer);
+    document.getElementById('playerArt').classList.remove('spinning');
+  }
+  renderTrackList();
+}
+
+function updatePlayButton(){
+  document.getElementById('playBtn').textContent = state.isPlaying ? '⏸' : '▶';
+}
+
+function nextTrack(){
+  let next = state.currentTrackIdx + 1;
+  if(state.shuffle) next = Math.floor(Math.random()*state.tracks.length);
+  if(next >= state.tracks.length) next = 0;
+  playTrack(next);
+}
+
+function prevTrack(){
+  if(state.progress > 5){ state.progress=0; return; }
+  let prev = state.currentTrackIdx - 1;
+  if(prev < 0) prev = state.tracks.length - 1;
+  playTrack(prev);
+}
+
+function parseDuration(str){
+  const parts = str.split(':').map(Number);
+  return parts[0]*60 + (parts[1]||0);
+}
+
+function formatTime(s){
+  const m = Math.floor(s/60);
+  const sec = Math.floor(s%60);
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+function startProgress(totalSeconds){
+  clearInterval(state.progressTimer);
+  const startProg = state.progress;
+  const startTime = Date.now() - startProg * 1000;
+
+  state.progressTimer = setInterval(()=>{
+    if(!state.isPlaying){ clearInterval(state.progressTimer); return; }
+    const elapsed = (Date.now()-startTime)/1000;
+    state.progress = Math.min(elapsed, totalSeconds);
+    const pct = (state.progress/totalSeconds)*100;
+    document.getElementById('progressFill').style.width = pct+'%';
+    document.getElementById('currentTime').textContent = formatTime(state.progress);
+    if(state.progress >= totalSeconds){
+      clearInterval(state.progressTimer);
+      state.repeat ? playTrack(state.currentTrackIdx) : nextTrack();
+    }
+  }, 250);
+}
+
+function seekTo(e){
+  const bar = e.currentTarget;
+  const rect = bar.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  const t = state.tracks[state.currentTrackIdx];
+  if(!t) return;
+  const total = parseDuration(t.duration);
+  state.progress = pct * total;
+  document.getElementById('progressFill').style.width = (pct*100)+'%';
+  document.getElementById('currentTime').textContent = formatTime(state.progress);
+  if(state.isPlaying) startProgress(total);
+}
+
+function toggleShuffle(){
+  state.shuffle = !state.shuffle;
+  document.getElementById('shuffleBtn').classList.toggle('active', state.shuffle);
+  showToast(state.shuffle ? '🔀 Aleatório ativado' : '🔀 Aleatório desativado');
+}
+
+function toggleRepeat(){
+  state.repeat = !state.repeat;
+  document.getElementById('repeatBtn').classList.toggle('active', state.repeat);
+  showToast(state.repeat ? '🔁 Repetir ativado' : '🔁 Repetir desativado');
+}
+
+function setVolume(val){
+  state.volume = parseInt(val);
+  state.muted = false;
+  const btn = document.getElementById('volBtn');
+  btn.textContent = val <= 0 ? '🔇' : val < 50 ? '🔉' : '🔊';
+}
+
+function toggleMute(){
+  state.muted = !state.muted;
+  document.getElementById('volBtn').textContent = state.muted ? '🔇' : '🔊';
+  document.getElementById('volumeSlider').value = state.muted ? 0 : state.volume;
+}
+
+// ═══════════════════════════════════════════════════════
+//  LIKE SYSTEM
+// ═══════════════════════════════════════════════════════
+function toggleLike(idx){
+  state.tracks[idx].liked = !state.tracks[idx].liked;
+  renderTrackList();
+  if(idx === state.currentTrackIdx){
+    const t = state.tracks[idx];
+    document.getElementById('playerLike').textContent = t.liked ? '♥' : '♡';
+    document.getElementById('playerLike').className = 'player-like' + (t.liked ? ' liked' : '');
+  }
+  showToast(state.tracks[idx].liked ? '❤️ Adicionada às curtidas' : '💔 Removida das curtidas');
+}
+
+function toggleLikeCurrent(){
+  toggleLike(state.currentTrackIdx);
+}
+
+// ═══════════════════════════════════════════════════════
+//  THEME TOGGLE
+// ═══════════════════════════════════════════════════════
+function toggleTheme(){
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', state.theme);
+  document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '🌙' : '☀️';
+  showToast(state.theme === 'dark' ? '🌙 Modo escuro' : '☀️ Modo claro');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SIDEBAR COLLAPSE
+// ═══════════════════════════════════════════════════════
+function toggleSidebar(){
+  const app = document.getElementById('mainApp');
+  const btn = document.getElementById('collapseBtn');
+  const collapsed = app.classList.toggle('sidebar-collapsed');
+  btn.textContent = collapsed ? '⟩' : '⟨';
+}
+
+// ═══════════════════════════════════════════════════════
+//  NAV ACTIVE STATE
+// ═══════════════════════════════════════════════════════
+function setActiveNav(el){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SEARCH
+// ═══════════════════════════════════════════════════════
+function handleSearch(val){
+  // In production: call GET /api/playlist with a search param
+  if(!val.trim()){ renderTrackList(); return; }
+  const filtered = state.tracks.filter(t =>
+    t.title.toLowerCase().includes(val.toLowerCase()) ||
+    t.artist.toLowerCase().includes(val.toLowerCase())
+  );
+  const list = document.getElementById('trackList');
+  if(filtered.length === 0){
+    list.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3);font-size:14px">Nenhuma música encontrada 🎵</div>';
+    return;
+  }
+  list.innerHTML = filtered.map((t)=>{
+    const i = state.tracks.indexOf(t);
+    return `
+      <div class="track-item" onclick="playTrack(${i})">
+        <div class="track-num"><span class="num-txt">${i+1}</span><span class="play-icon">▶</span></div>
+        <div class="track-info">
+          <div class="track-art" style="background:${GRADIENTS[i%GRADIENTS.length]}">${t.emoji}</div>
+          <div><div class="track-title">${t.title}</div><div class="track-artist">${t.artist}</div></div>
+        </div>
+        <div class="track-album">${t.album}</div>
+        <div class="track-duration">${t.duration}</div>
+        <div class="track-actions">
+          <button class="track-like-btn${t.liked?' liked':''}" onclick="event.stopPropagation();toggleLike(${i})">${t.liked?'♥':'♡'}</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  YOUTUBE MODAL
+// ═══════════════════════════════════════════════════════
+function openYTModal(){
+  const m = document.getElementById('ytModal');
+  m.style.display = 'flex';
+  document.getElementById('ytUrlInput').value = '';
+  document.getElementById('ytUrlInput').focus();
+}
+
+function closeYTModal(){
+  document.getElementById('ytModal').style.display = 'none';
+}
+
+async function convertYT(){
+  const url = document.getElementById('ytUrlInput').value.trim();
+  if(!url){ showToast('⚠️ Cole uma URL do YouTube','warn'); return; }
+  if(!url.includes('youtube.com') && !url.includes('youtu.be')){
+    showToast('⚠️ URL inválida. Use links do YouTube','warn'); return;
+  }
+  closeYTModal();
+  showToast('⏳ Convertendo vídeo… Isso pode levar um momento!');
+
+  // In production:
+  // const res = await fetch('/api/youtube/convert', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token },
+  //   body: JSON.stringify({ url })
+  // });
+  // const data = await res.json();
+  // state.tracks.unshift(data.musica);
+  // renderAll();
+
+  // Demo: add fake track after delay
+  setTimeout(()=>{
+    const emojis = ['🎵','🎸','🎹','🎷','🎺','🎻'];
+    const newTrack = {
+      id: Date.now(), liked: false,
+      emoji: emojis[Math.floor(Math.random()*emojis.length)],
+      title: 'Novo Vídeo YouTube', artist: 'YouTube Artist',
+      album: 'YouTube Import', duration: '3:45',
+    };
+    state.tracks.unshift(newTrack);
+    renderAll();
+    showToast('✅ Música adicionada com sucesso!');
+  }, 2000);
+}
+
+// ═══════════════════════════════════════════════════════
+//  TOAST NOTIFICATIONS
+// ═══════════════════════════════════════════════════════
+function showToast(msg, type='info'){
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<span>${msg}</span>`;
+  if(type==='warn') toast.style.borderColor = '#f59e0b';
+  container.appendChild(toast);
+  setTimeout(()=>{
+    toast.classList.add('removing');
+    setTimeout(()=>toast.remove(), 300);
+  }, 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+//  KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if(e.target.tagName === 'INPUT') return;
+  if(e.code === 'Space'){ e.preventDefault(); togglePlay(); }
+  if(e.code === 'ArrowRight') nextTrack();
+  if(e.code === 'ArrowLeft') prevTrack();
+  if(e.code === 'KeyM') toggleMute();
+});
+
+// Close modal on backdrop click
+document.getElementById('ytModal').addEventListener('click', function(e){
+  if(e.target === this) closeYTModal();
+});
+
+// Enter to login
+document.addEventListener('keydown', e => {
+  const loginPage = document.getElementById('loginPage');
+  if(e.code==='Enter' && loginPage.style.display!=='none' && !loginPage.classList.contains('hidden')){
+    doLogin();
+  }
+});
+</script>
+</body>
+</html>
