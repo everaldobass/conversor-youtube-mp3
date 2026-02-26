@@ -52,6 +52,10 @@ export default function LoginPage() {
       }
       navigate('/');
     } catch (err) {
+      if (!err.response) {
+        setError('API offline em http://127.0.0.1:5000. Inicie o backend e tente novamente.');
+        return;
+      }
       setError(
         err.response?.data?.erro || 'Erro ao conectar. Verifique suas credenciais.'
       );
@@ -187,9 +191,11 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
+                autoComplete="email"
+                spellCheck={false}
                 className="
                   w-full bg-[var(--bg3)] border-[1.5px] border-[var(--glass-border)]
-                  rounded-lg pl-11 pr-4 py-3 text-[var(--text)] text-[14px] font-medium
+                  rounded-lg pl-11 pr-4 py-3 text-[var(--text)] text-[14px] font-medium leading-[1.2]
                   placeholder:text-[var(--text3)]
                   focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-dim)] focus:bg-[var(--bg2)]
                   transition-all duration-200
@@ -209,10 +215,12 @@ export default function LoginPage() {
                 type={showPass ? 'text' : 'password'}
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
-                placeholder="••••••••"
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                spellCheck={false}
+                placeholder="********"
                 className="
                   w-full bg-[var(--bg3)] border-[1.5px] border-[var(--glass-border)]
-                  rounded-lg pl-11 pr-12 py-3 text-[var(--text)] text-[14px] font-medium
+                  rounded-lg pl-11 pr-12 py-3 text-[var(--text)] text-[14px] font-medium leading-[1.2]
                   placeholder:text-[var(--text3)]
                   focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-dim)] focus:bg-[var(--bg2)]
                   transition-all duration-200
@@ -296,3 +304,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

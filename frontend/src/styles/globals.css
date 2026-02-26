@@ -1,6 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 @import "./animations.css";
-@import url('https://fonts.googleapis.com');
 
 /* ============================================================
    styles/globals.css — Estilos Globais (Padrão Tailwind v4)
@@ -47,6 +47,30 @@
 
   /* Animações */
   --animate-transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Compatibilidade com nomes de variáveis usados nos componentes */
+:root {
+  --bg: var(--color-bg);
+  --bg2: var(--color-bg2);
+  --bg3: var(--color-bg3);
+  --card: var(--color-card);
+  --card-hover: var(--color-card-hover);
+  --accent: var(--color-accent);
+  --accent-dim: var(--color-accent-dim);
+  --accent-glow: var(--color-accent-glow);
+  --text: var(--color-text);
+  --text2: var(--color-text2);
+  --text3: var(--color-text3);
+  --glass: var(--color-glass);
+  --glass-border: var(--color-glass-border);
+  --shadow: var(--color-shadow);
+  --player-bg: var(--color-player-bg);
+  --sidebar-w: var(--spacing-sidebar-w);
+  --player-h: var(--spacing-player-h);
+  --radius: var(--radius-radius);
+  --radius-sm: var(--radius-radius-sm);
+  --transition: var(--animate-transition);
 }
 
 /* ── Tema Light ── */
@@ -163,4 +187,13 @@ button:focus-visible {
 
 input:focus {
   outline: none;
+}
+
+/* Evita contraste estranho/duplicado em autofill no Chrome */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+  box-shadow: 0 0 0 1000px var(--bg3) inset;
+  caret-color: var(--text);
 }
